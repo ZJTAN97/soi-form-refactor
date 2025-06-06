@@ -8,7 +8,6 @@ import "@mantine/core/styles.css";
 import { routeTree } from "./routeTree.gen";
 
 import "./styles.css";
-import reportWebVitals from "./reportWebVitals.ts";
 import { MantineProvider } from "@mantine/core";
 
 // Create a new router instance

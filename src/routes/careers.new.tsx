@@ -24,7 +24,7 @@ function RouteComponent() {
     resolver: zodResolver(careerRequestSchema),
     defaultValues: {
       company: "",
-      lastDrawnSalay: 0,
+      lastDrawnSalary: 0,
       duration: null,
       appointment: {
         position: "",
@@ -39,9 +39,9 @@ function RouteComponent() {
   console.log(formMethods.watch());
 
   return (
-    <Stack p="xl">
-      <FormProvider {...formMethods}>
-        <form>
+    <FormProvider {...formMethods}>
+      <form>
+        <Stack p="xl" gap="md">
           <SourceOfInformationButton
             name="company"
             parentControl={formMethods.control}
@@ -59,8 +59,26 @@ function RouteComponent() {
               )}
             />
           </SourceOfInformationButton>
-        </form>
-      </FormProvider>
-    </Stack>
+
+          <SourceOfInformationButton
+            name="lastDrawnSalary"
+            parentControl={formMethods.control}
+          >
+            <Controller
+              control={formMethods.control}
+              name="lastDrawnSalary"
+              render={({ field, fieldState }) => (
+                <NumberInput
+                  {...field}
+                  error={fieldState.error?.message}
+                  label="Last drawn salary"
+                  placeholder="Salary"
+                />
+              )}
+            />
+          </SourceOfInformationButton>
+        </Stack>
+      </form>
+    </FormProvider>
   );
 }

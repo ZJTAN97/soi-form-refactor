@@ -20,7 +20,7 @@ export const sourceOfInformationSchema = z.object({
 
 export const careerRequestSchema = z.object({
   company: z.string().min(1, "Cannot be empty"),
-  lastDrawnSalay: z.number(),
+  lastDrawnSalary: z.number(),
   duration: z.date().nullable(),
   appointment: z.object({
     position: z.string().min(1, "Position cannot be empty"),

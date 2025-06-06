@@ -61,6 +61,7 @@ export const SourceOfInformationButton = ({
       <Flex align="center" gap="lg">
         <Box w="40%">{children}</Box>
         <SourcePopover
+          name={name}
           parentControl={formMethods.control}
           handleUpdateSourcesOfInformation={handleUpdateSourcesOfInformation}
         />

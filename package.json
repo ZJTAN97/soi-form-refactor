@@ -9,19 +9,19 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.0.1",
-    "@mantine/core": "^8.0.2",
-    "@mantine/hooks": "^8.0.2",
-    "@tabler/icons-react": "^3.34.0",
-    "@tanstack/react-form": "^1.12.1",
-    "@tanstack/react-router": "1.120.15",
-    "@tanstack/react-router-devtools": "1.120.15",
-    "@tanstack/router-plugin": "1.120.15",
-    "install": "^0.13.0",
+    "@hookform/resolvers": "5.0.1",
+    "@mantine/core": "8.0.2",
+    "@mantine/hooks": "8.0.2",
+    "@tabler/icons-react": "3.34.0",
+    "@tanstack/react-form": "1.12.1",
+    "@tanstack/react-router": "1.120.16",
+    "@tanstack/react-router-devtools": "1.120.16",
+    "@tanstack/router-plugin": "1.120.16",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "react-hook-form": "^7.57.0",
-    "zod": "^3.25.51"
+    "react-hook-form": "7.57.0",
+    "zod": "3.25.53",
+    "zustand": "5.0.5"
   },
   "devDependencies": {
     "@testing-library/dom": "10.4.0",
@@ -30,12 +30,11 @@
     "@types/react-dom": "19.1.6",
     "@vitejs/plugin-react": "4.5.1",
     "jsdom": "26.1.0",
-    "postcss": "^8.5.4",
-    "postcss-preset-mantine": "^1.17.0",
-    "postcss-simple-vars": "^7.0.1",
+    "postcss": "8.5.4",
+    "postcss-preset-mantine": "1.17.0",
+    "postcss-simple-vars": "7.0.1",
     "typescript": "5.8.3",
     "vite": "6.3.5",
-    "vitest": "3.2.2",
-    "web-vitals": "5.0.2"
+    "vitest": "3.2.2"
   }
 }

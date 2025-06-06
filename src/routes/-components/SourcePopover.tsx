@@ -1,14 +1,17 @@
 import {
   ActionIcon,
+  Box,
   Button,
   Card,
   CloseIcon,
   Flex,
   Popover,
+  ScrollArea,
   Select,
   Stack,
   Text,
   Textarea,
+  TextInput,
 } from "@mantine/core";
 import { IconFile } from "@tabler/icons-react";
 import {
@@ -27,16 +30,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 
 export const SourcePopover = ({
+  name,
   parentControl,
   handleUpdateSourcesOfInformation,
 }: {
+  name: string;
   parentControl: Control<SourceOfInformationType>;
   handleUpdateSourcesOfInformation: (payload: SourceOfInformationType) => void;
 }) => {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-  const [isReadMode, setIsReadMode] = useState(true);
+  const [mode, setMode] = useState<"create" | "update" | "read">("read");
+  const [currentSourceId, setCurrentSourceId] = useState<number | undefined>();
 
-  const { append } = useFieldArray<SourceOfInformationType>({
+  const { append, remove, update } = useFieldArray<SourceOfInformationType>({
     control: parentControl,
     name: "sources",
   });
@@ -52,19 +58,32 @@ export const SourcePopover = ({
     },
   });
 
-  const addSource = handleSubmit((payload) => {
-    append(payload);
-    setIsReadMode(true);
+  const handleSubmitSource = handleSubmit((payload) => {
+    if (mode === "create") {
+      append(payload);
+    }
+
+    if (mode === "update" && currentSourceId !== undefined) {
+      update(currentSourceId, payload);
+    }
+
     reset();
+    setMode("read");
   });
 
   const addSourceOfInformation = () => {
     handleUpdateSourcesOfInformation({
-      field: "company",
+      field: name,
       content: "",
       sources: currentSources,
     });
     setIsPopoverOpen(false);
+  };
+
+  const closePopover = () => {
+    setIsPopoverOpen(false);
+    reset();
+    setMode("read");
   };
 
   return (
@@ -74,46 +93,79 @@ export const SourcePopover = ({
       position="right-start"
       withArrow
       shadow="md"
-      closeOnClickOutside={false}
     >
       <Popover.Target>
-        <ActionIcon
+        <Box
           variant="transparent"
           color="violet"
-          mt="md"
+          mt={26}
           onClick={() => setIsPopoverOpen(true)}
         >
-          <IconFile />
-        </ActionIcon>
+          {currentSources.length > 0 ? (
+            <TextInput
+              readOnly
+              value={`${currentSources.length} source(s)`}
+              size="xs"
+              w={100}
+            />
+          ) : (
+            <IconFile />
+          )}
+        </Box>
       </Popover.Target>
       <Popover.Dropdown p="lg">
         <Flex justify="space-between" align="center">
           <Text fw={500}>Source of Information</Text>
-          <CloseIcon size="16" onClick={() => setIsPopoverOpen(false)} />
+          <CloseIcon size="16" onClick={closePopover} />
         </Flex>
-        {isReadMode ? (
+        {mode === "read" ? (
           <Stack pt="md">
-            {currentSources.map((source) => (
-              <Card key={source.remarks} withBorder radius="md" p="xs">
-                <Text size="sm" fw={600}>
-                  {source.type}
-                </Text>
-                <Text pt="xs" size="xs">
-                  {source.remarks}
-                </Text>
-              </Card>
-            ))}
+            <ScrollArea type="always" h={200} scrollbarSize={5}>
+              <Stack pr="lg">
+                {currentSources.map((source, id) => (
+                  <Card key={source.remarks} withBorder radius="md" p="md">
+                    <Flex justify="space-between">
+                      <Text size="sm" fw={600}>
+                        {source.type}
+                      </Text>
+                      <CloseIcon size="16" onClick={() => remove(id)} />
+                    </Flex>
+
+                    <Text pt="xs" size="xs">
+                      {source.remarks}
+                    </Text>
+
+                    <Flex justify="flex-end" pt="xs">
+                      <Button
+                        variant="default"
+                        size="compact-xs"
+                        onClick={() => {
+                          setMode("update");
+                          setCurrentSourceId(id);
+                          reset(source);
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    </Flex>
+                  </Card>
+                ))}
+              </Stack>
+            </ScrollArea>
             <Button
-              onClick={() => setIsReadMode(false)}
-              variant="outline"
+              onClick={() => setMode("create")}
               color="gray"
+              mr="md"
+              size="xs"
             >
               Add source of information
             </Button>
-            <Button onClick={addSourceOfInformation}>Confirm and close</Button>
+            <Button size="xs" mr="md" onClick={addSourceOfInformation}>
+              Confirm and close
+            </Button>
           </Stack>
         ) : (
-          <form onSubmit={addSource}>
+          <form onSubmit={handleSubmitSource}>
             <Stack py="md">
               <Controller
                 control={control}
@@ -138,9 +190,16 @@ export const SourcePopover = ({
                   />
                 )}
               />
-              <Flex justify="flex-end" pt="md">
-                <Button type="submit">Create</Button>
-              </Flex>
+              {mode === "create" ? (
+                <Flex justify="flex-end" pt="md">
+                  <Button type="submit">Create</Button>
+                </Flex>
+              ) : mode === "update" ? (
+                <Flex pt="md" justify="space-between">
+                  <Button color="red">Delete</Button>
+                  <Button type="submit">Update</Button>
+                </Flex>
+              ) : null}
             </Stack>
           </form>
         )}
