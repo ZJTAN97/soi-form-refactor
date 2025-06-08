@@ -7,30 +7,34 @@ import {
   useForm,
   useFormContext,
   type Control,
+  type FieldPath,
 } from "react-hook-form";
 import { Box, Flex } from "@mantine/core";
 import {
   sourceOfInformationSchema,
-  type CareerRequestType,
   type SourceOfInformationType,
 } from "../-schema/career";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-export const SourceOfInformationButton = ({
+export const SourceOfInformationButton = <
+  T extends { sourceOfInformations: SourceOfInformationType[] }
+>({
   name,
   parentControl,
   children,
 }: {
-  name: string;
-  parentControl: Control<CareerRequestType>;
+  name: FieldPath<T>;
+  parentControl: Control<T>;
   children: ReactNode;
 }) => {
-  const { append, update } = useFieldArray<CareerRequestType>({
+  const { append, update } = useFieldArray<any>({
     name: "sourceOfInformations",
     control: parentControl,
   });
 
-  const { getValues } = useFormContext<CareerRequestType>();
+  const { getValues } = useFormContext<{
+    sourceOfInformations: SourceOfInformationType[];
+  }>();
   const currentSourcesOfInformation = getValues("sourceOfInformations");
 
   const existingSourceOfInformationIndex =
@@ -40,7 +44,6 @@ export const SourceOfInformationButton = ({
     payload: SourceOfInformationType
   ) => {
     if (existingSourceOfInformationIndex === -1) {
-      // create scenario
       append(payload);
     } else {
       update(existingSourceOfInformationIndex, payload);

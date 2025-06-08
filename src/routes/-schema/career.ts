@@ -14,14 +14,14 @@ export const sourceSchema = z.object({
 
 export const sourceOfInformationSchema = z.object({
   field: z.string().min(1, "cannot be empty"),
-  content: z.string().min(1, "cannnot be empty"),
+  content: z.string(),
   sources: z.array(sourceSchema),
 });
 
 export const careerRequestSchema = z.object({
   company: z.string().min(1, "Cannot be empty"),
-  lastDrawnSalary: z.number(),
-  duration: z.date().nullable(),
+  lastDrawnSalary: z.number().nullable(),
+  joinDate: z.date(),
   appointment: z.object({
     position: z.string().min(1, "Position cannot be empty"),
     rank: z.string().min(1, "Rank cannot be empty"),

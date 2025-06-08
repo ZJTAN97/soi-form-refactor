@@ -1,5 +1,4 @@
 import {
-  ActionIcon,
   Box,
   Button,
   Card,
@@ -67,7 +66,11 @@ export const SourcePopover = ({
       update(currentSourceId, payload);
     }
 
-    reset();
+    reset({
+      type: null,
+      remarks: "",
+    });
+
     setMode("read");
   });
 
@@ -153,7 +156,9 @@ export const SourcePopover = ({
               </Stack>
             </ScrollArea>
             <Button
-              onClick={() => setMode("create")}
+              onClick={() => {
+                setMode("create");
+              }}
               color="gray"
               mr="md"
               size="xs"
@@ -165,43 +170,41 @@ export const SourcePopover = ({
             </Button>
           </Stack>
         ) : (
-          <form onSubmit={handleSubmitSource}>
-            <Stack py="md">
-              <Controller
-                control={control}
-                name="type"
-                render={({ field, fieldState }) => (
-                  <Select
-                    {...field}
-                    error={fieldState.error?.message}
-                    label="Source Type"
-                    data={SOURCE_TYPES}
-                  />
-                )}
-              />
-              <Controller
-                control={control}
-                name="remarks"
-                render={({ field, fieldState }) => (
-                  <Textarea
-                    {...field}
-                    error={fieldState.error?.message}
-                    label="Remarks"
-                  />
-                )}
-              />
-              {mode === "create" ? (
-                <Flex justify="flex-end" pt="md">
-                  <Button type="submit">Create</Button>
-                </Flex>
-              ) : mode === "update" ? (
-                <Flex pt="md" justify="space-between">
-                  <Button color="red">Delete</Button>
-                  <Button type="submit">Update</Button>
-                </Flex>
-              ) : null}
-            </Stack>
-          </form>
+          <Stack py="md">
+            <Controller
+              control={control}
+              name="type"
+              render={({ field, fieldState }) => (
+                <Select
+                  {...field}
+                  error={fieldState.error?.message}
+                  label="Source Type"
+                  data={SOURCE_TYPES}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="remarks"
+              render={({ field, fieldState }) => (
+                <Textarea
+                  {...field}
+                  error={fieldState.error?.message}
+                  label="Remarks"
+                />
+              )}
+            />
+            {mode === "create" ? (
+              <Flex justify="flex-end" pt="md">
+                <Button onClick={handleSubmitSource}>Create</Button>
+              </Flex>
+            ) : mode === "update" ? (
+              <Flex pt="md" justify="space-between">
+                <Button color="red">Delete</Button>
+                <Button onClick={handleSubmitSource}>Update</Button>
+              </Flex>
+            ) : null}
+          </Stack>
         )}
       </Popover.Dropdown>
     </Popover>
