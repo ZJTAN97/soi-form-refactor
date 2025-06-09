@@ -36,7 +36,7 @@ if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <MantineProvider>
+      <MantineProvider defaultColorScheme="dark">
         <Notifications />
         <RouterProvider router={router} />
       </MantineProvider>
